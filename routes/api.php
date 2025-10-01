@@ -5,13 +5,16 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\ItemCategoryController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\RoleController; 
 use Illuminate\Support\Facades\Route;
 
+// Public Routes (Auth)
 Route::controller(AuthController::class)->group(function () {
     Route::post('register', 'register');
     Route::post('login', 'login');
 });
 
+// Protected Routes (Sanctum + Auth)
 Route::middleware('auth:sanctum')->group(function () {
 
     // Authenticated User Routes
@@ -39,20 +42,33 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     // Item Routes
-    Route::controller(ItemController::class)->group(function(){
-        Route::get('items', 'index');           // List all items
-        Route::post('items', 'store');          // Create new item
-        Route::get('items/{id}', 'show');       // Show single item
-        Route::put('items/{id}', 'update');     // Update item
-        Route::delete('items/{id}', 'destroy'); // Delete item
+    Route::controller(ItemController::class)->group(function() {
+        Route::get('items', 'index');
+        Route::post('items', 'store');
+        Route::get('items/{id}', 'show');
+        Route::put('items/{id}', 'update');
+        Route::delete('items/{id}', 'destroy');
     });
 
-    Route::controller(OrderController::class)->group(function()
-    {
-        Route::get('order', 'index');
-        Route::post('order', 'store');
-        Route::get('order/{id}', 'show');
-        Route::put('order/{id}', 'update');
-        Route::delete('order/{id}', 'destroy');
+    // Order Routes
+    Route::controller(OrderController::class)->group(function() {
+        Route::get('orders', 'index');
+        Route::post('orders', 'store');
+        Route::get('orders/{id}', 'show');
+        Route::put('orders/{id}', 'update');
+        Route::delete('orders/{id}', 'destroy');
     });
+
+    // Role Routes
+    Route::controller(RoleController::class)->group(function() {
+        Route::get('roles', 'index');          
+        Route::post('roles', 'store');         
+        Route::get('roles/{id}', 'show');      
+        Route::put('roles/{id}', 'update');    
+        Route::delete('roles/{id}', 'destroy');
+
+        // Permissions (handled by RoleController)
+        Route::get('permissions', 'getAllPermission'); 
+    });
+
 });

@@ -5,7 +5,8 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\ItemCategoryController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\OrderController;
-use App\Http\Controllers\RoleController; 
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 // Public Routes (Auth)
@@ -61,14 +62,22 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Role Routes
     Route::controller(RoleController::class)->group(function() {
-        Route::get('roles', 'index');          
-        Route::post('roles', 'store');         
-        Route::get('roles/{id}', 'show');      
-        Route::put('roles/{id}', 'update');    
+        Route::get('roles', 'index');
+        Route::post('roles', 'store');
+        Route::get('roles/{id}', 'show');
+        Route::put('roles/{id}', 'update');
         Route::delete('roles/{id}', 'destroy');
 
         // Permissions (handled by RoleController)
-        Route::get('permissions', 'getAllPermission'); 
+        Route::get('permissions', 'getAllPermission');
+    });
+
+      Route::controller(UserController::class)->group(function () {
+        Route::get('users', 'index');
+        Route::post('users', 'store');
+        Route::get('users/{id}', 'show');
+        Route::put('users/{id}', 'update');
+        Route::delete('users/{id}', 'destroy');
     });
 
 });
